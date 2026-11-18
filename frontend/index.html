@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeBite — AI Travel Menu Analyzer</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background: #f8fafc; color: #0f172a; line-height: 1.6; }
+        nav { background: #ffffff; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 10; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: #16a34a; }
+        .nav-links { display: flex; gap: 1.5rem; }
+        .nav-links a { text-decoration: none; color: #475569; font-weight: 500; }
+        .nav-links a:hover { color: #16a34a; }
+        .hero { text-align: center; padding: 4rem 5% 2rem; max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #0f172a; }
+        .hero p { color: #64748b; font-size: 1.1rem; margin-bottom: 2rem; }
+        .analyzer-box { background: #ffffff; max-width: 700px; margin: 0 auto 3rem; padding: 2rem; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .input-group { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        input, select { padding: 0.9rem 1rem; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; }
+        input { flex: 1; min-width: 220px; }
+        button { background: #16a34a; color: white; border: none; padding: 0.9rem 1.8rem; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #15803d; }
+        button:disabled { background: #94a3b8; cursor: not-allowed; }
+        .result-card { margin-top: 1.5rem; padding: 1.5rem; background: #f1f5f9; border-radius: 12px; white-space: pre-wrap; display: none; text-align: left; }
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto 4rem; padding: 0 5%; }
+        .feature-item { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+        .feature-item h3 { margin-bottom: 0.5rem; color: #16a34a; }
+        footer { text-align: center; padding: 2rem; color: #94a3b8; font-size: 0.9rem; }
+        @media (max-width: 600px) { .hero h1 { font-size: 1.9rem; } .nav-links { display: none; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">SafeBite</div>
+        <div class="nav-links">
+            <a href="#analyzer">Analyzer</a>
+            <a href="#features">Features</a>
+            <a href="http://127.0.0.1:8000/docs" target="_blank">API Docs</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Eat Safely Anywhere in the World</h1>
+        <p>Paste any foreign dish name or menu item to instantly translate, uncover hidden ingredients, and check Halal & allergen safety.</p>
+    </section>
+
+    <section id="analyzer" class="analyzer-box">
+        <div class="input-group">
+            <input type="text" id="dishInput" placeholder="e.g., 宫保鸡丁 (Kung Pao Chicken) or Tacos al Pastor...">
+            <select id="langSelect">
+                <option value="Azerbaijani">Azərbaycan</option>
+                <option value="English">English</option>
+                <option value="Russian">Русский</option>
+            </select>
+            <button id="analyzeBtn" onclick="analyzeDish()">Analyze</button>
+        </div>
+        <div id="result" class="result-card"></div>
+    </section>
+
+    <section id="features" class="features">
+        <div class="feature-item">
+            <h3>Instant Translation</h3>
+            <p>Break language barriers with immediate contextual dish translations.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Ingredient Breakdown</h3>
+            <p>Know exactly what goes into local dishes before you order.</p>
+        </div>
+        <div class="feature-item">
+            <h3>Dietary & Halal Alerts</h3>
+            <p>Clear warnings for pork, alcohol, nuts, and spice levels.</p>
+        </div>
+    </section>
+
+    <footer>SafeBite MVP — Built for Holberton Capstone Project</footer>
+
+    <script>
+        async function analyzeDish() {
+            const dishName = document.getElementById('dishInput').value.trim();
+            const targetLanguage = document.getElementById('langSelect').value;
+            const resultDiv = document.getElementById('result');
+            const btn = document.getElementById('analyzeBtn');
+
+            if (!dishName) return alert("Please enter a dish name!");
+
+            btn.disabled = true;
+            btn.innerText = "Analyzing...";
+            resultDiv.style.display = "block";
+            resultDiv.innerText = "Checking ingredients and safety alerts...";
+
+            try {
+                const res = await fetch("http://127.0.0.1:8000/api/analyze", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ dish_name: dishName, target_language: targetLanguage })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    resultDiv.innerText = data.analysis;
+                } else {
+                    resultDiv.innerText = "Error: " + (data.detail || "Something went wrong");
+                }
+            } catch (err) {
+                resultDiv.innerText = "Connection error. Make sure the backend server is running on port 8000.";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Analyze";
+            }
+        }
+    </script>
+</body>
+</html>
