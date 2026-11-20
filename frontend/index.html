@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SafeBite — AI Qida Təhlükəsizliyi Platforması (Sprint 2)</title>
+  <title>SafeBite — AI Qida Təhlükəsizliyi Platforması (Sprint 3)</title>
   <style>
     :root {
       --primary: #10b981;
@@ -20,23 +20,33 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: var(--bg); color: var(--text); line-height: 1.5; padding: 20px; }
-    .container { max-width: 1100px; margin: 0 auto; }
-    header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-    .brand { display: flex; align-items: center; gap: 10px; }
+    .container { max-width: 1140px; margin: 0 auto; }
+
+    header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .brand h1 { font-size: 1.5rem; font-weight: 700; color: var(--text); }
     .badge-sprint { background: #d1fae5; color: var(--primary-dark); padding: 4px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
-    .docs-link { text-decoration: none; color: var(--primary-dark); font-size: 0.9rem; font-weight: 600; border: 1px solid var(--primary); padding: 6px 12px; border-radius: 8px; }
+    .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .role-select { width: auto; padding: 6px 10px; font-size: 0.85rem; font-weight: 600; border-color: var(--primary); background: #ecfdf5; color: var(--primary-dark); }
+    .docs-link { text-decoration: none; color: var(--primary-dark); font-size: 0.85rem; font-weight: 600; border: 1px solid var(--primary); padding: 6px 12px; border-radius: 8px; }
     .docs-link:hover { background: var(--primary); color: #fff; }
+
+    /* Stats Bar */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; box-shadow: var(--shadow); }
+    .stat-label { font-size: 0.8rem; color: var(--muted); font-weight: 600; }
+    .stat-value { font-size: 1.5rem; font-weight: 800; margin-top: 4px; color: var(--text); }
 
     .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
     @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
 
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
-    .card h2 { font-size: 1.1rem; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+    .card h2 { font-size: 1.08rem; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 
     .form-group { margin-bottom: 12px; }
-    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: var(--muted); }
-    input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; outline: none; transition: border 0.2s; }
+    label { display: block; font-size: 0.84rem; font-weight: 600; margin-bottom: 5px; color: var(--muted); }
+    input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.94rem; outline: none; transition: border 0.2s; }
     input:focus, select:focus, textarea:focus { border-color: var(--primary); }
 
     .row-inputs { display: flex; gap: 8px; }
@@ -54,6 +64,10 @@
     .tag { display: inline-flex; align-items: center; gap: 6px; background: #fef3c7; color: #92400e; padding: 5px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
     .tag button { background: none; color: #92400e; padding: 0 2px; font-size: 1rem; line-height: 1; }
 
+    .filter-bar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .filter-bar input { flex: 2; min-width: 180px; }
+    .filter-bar select { flex: 1; min-width: 140px; }
+
     .toast { position: fixed; bottom: 20px; right: 20px; padding: 12px 18px; border-radius: 10px; color: #fff; font-weight: 600; font-size: 0.9rem; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: none; z-index: 999; }
     .toast.success { background: var(--primary-dark); }
     .toast.error { background: var(--danger); }
@@ -69,7 +83,6 @@
     .pill.danger { background: #fee2e2; color: #991b1b; }
     .meta { font-size: 0.78rem; color: var(--muted); margin-top: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
     .note-box { margin-top: 8px; padding: 8px 10px; background: #f1f5f9; border-radius: 6px; font-size: 0.85rem; color: #334155; }
-
     .edit-panel { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); display: none; }
   </style>
 </head>
@@ -78,13 +91,39 @@
     <header>
       <div class="brand">
         <h1>🛡️ SafeBite</h1>
-        <span class="badge-sprint">Sprint 2 • DB + CRUD</span>
+        <span class="badge-sprint">Sprint 3 • Live Production</span>
       </div>
-      <a class="docs-link" href="http://127.0.0.1:8000/docs" target="_blank">Swagger API Docs ↗</a>
+      <div class="header-actions">
+        <select id="userRole" class="role-select" title="İstifadəçi rolu">
+          <option value="user">👤 Rol: İstifadəçi</option>
+          <option value="nutritionist">🩺 Rol: Qida Eksperti</option>
+        </select>
+        <a class="docs-link" id="docsLink" href="/docs" target="_blank">Swagger API Docs ↗</a>
+      </div>
     </header>
 
+    <!-- Statistika Paneli -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Ümumi Analizlər</div>
+        <div class="stat-value" id="statTotal">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Təhlükəsiz Qidalar</div>
+        <div class="stat-value" style="color: var(--primary-dark);" id="statSafe">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Diqqət / Riskli</div>
+        <div class="stat-value" style="color: var(--danger);" id="statRisk">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Aktiv Allergenlər</div>
+        <div class="stat-value" style="color: var(--warning);" id="statAllergies">0</div>
+      </div>
+    </div>
+
     <div class="grid">
-      <!-- SOL SÜTUN: Şəxsi Allergiya Profili (Create, Read, Delete) -->
+      <!-- SOL SÜTUN: Şəxsi Allergiya Profili -->
       <div>
         <div class="card">
           <h2>⚠️ Şəxsi Allergiyalarım</h2>
@@ -111,15 +150,15 @@
         </div>
       </div>
 
-      <!-- SAĞ SÜTUN: Yemək Analizi (Create) və Tarixçə (Read, Update, Delete) -->
+      <!-- SAĞ SÜTUN: Yemək Analizi və Tarixçə (Axtarış + Filtr + CRUD) -->
       <div>
         <div class="card">
-          <h2>🍽️ Yeni Qida Analizi</h2>
+          <h2>🍽️ Qida və ya Tərkib Analizi</h2>
           <form id="analyzeForm">
             <div class="row-inputs" style="margin-bottom: 12px; flex-wrap: wrap;">
               <div style="flex: 2; min-width: 200px;">
-                <label for="foodName">Yeməyin adı *</label>
-                <input type="text" id="foodName" placeholder="Məs: Sezar salatı, Pad Thai, Xəngəl..." required minlength="2" />
+                <label for="foodName">Yeməyin adı və ya etiket tərkibi *</label>
+                <input type="text" id="foodName" placeholder="Məs: Sezar salatı, Pad Thai və ya məhsulun tərkibi..." required minlength="2" />
               </div>
               <div style="flex: 1; min-width: 140px;">
                 <label for="language">Cavab dili</label>
@@ -137,9 +176,20 @@
 
         <div class="card">
           <h2>
-            <span>📋 Analiz Tarixçəsi (Verilənlər Bazası)</span>
-            <button class="btn-outline btn-sm" onclick="loadHistory()">Yenilə</button>
+            <span>📋 Analiz Tarixçəsi</span>
+            <button class="btn-outline btn-sm" onclick="refreshAll()">Yenilə</button>
           </h2>
+
+          <div class="filter-bar">
+            <input type="text" id="searchInput" placeholder="Yemək və ya allergen axtar..." oninput="loadHistory()" />
+            <select id="statusFilter" onchange="loadHistory()">
+              <option value="ALL">Bütün statuslar</option>
+              <option value="Təhlükəsiz">Təhlükəsiz</option>
+              <option value="Diqqət">Diqqətli Ol</option>
+              <option value="Təhlükəli">Təhlükəli</option>
+            </select>
+          </div>
+
           <div id="historyContainer">
             <div class="state-box">Məlumatlar yüklənir...</div>
           </div>
@@ -151,7 +201,18 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    const API_BASE = "http://127.0.0.1:8000";
+    const API_BASE = (window.location.protocol === "file:" || window.location.port !== "8000" && window.location.hostname === "127.0.0.1")
+      ? "http://127.0.0.1:8000"
+      : "";
+
+    document.getElementById("docsLink").href = `${API_BASE}/docs`;
+
+    function getHeaders() {
+      return {
+        "Content-Type": "application/json",
+        "X-User-Role": document.getElementById("userRole").value
+      };
+    }
 
     function showToast(msg, type = "success") {
       const el = document.getElementById("toast");
@@ -163,12 +224,22 @@
 
     function getStatusClass(status) {
       const s = (status || "").toLowerCase();
-      if (s.includes("təhlükəsiz") || s.includes("safe") || s.includes("halal")) return "safe";
-      if (s.includes("təhlükəli") || s.includes("danger") || s.includes("qeyri")) return "danger";
+      if (s.includes("təhlükəli") || s.includes("danger") || s.includes("qeyri") || s.includes("опас")) return "danger";
+      if (s.includes("təhlükəsiz") || s.includes("safe") || s.includes("halal") || s.includes("безопас")) return "safe";
       return "warn";
     }
 
-    // --- ALLERGIES CRUD ---
+    async function loadStats() {
+      try {
+        const res = await fetch(`${API_BASE}/api/stats`);
+        const s = await res.json();
+        document.getElementById("statTotal").textContent = s.total_analyses;
+        document.getElementById("statSafe").textContent = s.safe_count;
+        document.getElementById("statRisk").textContent = s.warning_count + s.danger_count;
+        document.getElementById("statAllergies").textContent = s.active_allergies;
+      } catch (e) {}
+    }
+
     async function loadAllergies() {
       const container = document.getElementById("allergyList");
       try {
@@ -199,14 +270,14 @@
       try {
         const res = await fetch(`${API_BASE}/api/allergies`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: getHeaders(),
           body: JSON.stringify({ name, severity })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || "Xəta baş verdi");
         nameInput.value = "";
         showToast("Allergiya profilə əlavə olundu");
-        loadAllergies();
+        refreshAll();
       } catch (err) {
         showToast(err.message, "error");
       }
@@ -214,16 +285,15 @@
 
     async function deleteAllergy(id) {
       try {
-        const res = await fetch(`${API_BASE}/api/allergies/${id}`, { method: "DELETE" });
+        const res = await fetch(`${API_BASE}/api/allergies/${id}`, { method: "DELETE", headers: getHeaders() });
         if (!res.ok) throw new Error("Silinmə zamanı xəta");
         showToast("Allergiya silindi");
-        loadAllergies();
+        refreshAll();
       } catch (err) {
         showToast(err.message, "error");
       }
     }
 
-    // --- ANALYZE & HISTORY CRUD ---
     document.getElementById("analyzeForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const foodInput = document.getElementById("foodName");
@@ -239,14 +309,14 @@
       try {
         const res = await fetch(`${API_BASE}/api/analyze`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: getHeaders(),
           body: JSON.stringify({ food_name, language })
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || "Analiz xətası");
         foodInput.value = "";
         showToast(`"${data.food_name}" analiz edildi və yadda saxlanıldı!`);
-        loadHistory();
+        refreshAll();
       } catch (err) {
         showToast(err.message, "error");
       } finally {
@@ -257,12 +327,18 @@
 
     async function loadHistory() {
       const container = document.getElementById("historyContainer");
-      container.innerHTML = `<div class="state-box">Tarixçə yüklənir...</div>`;
+      const search = document.getElementById("searchInput").value.trim();
+      const statusFilter = document.getElementById("statusFilter").value;
+
+      const params = new URLSearchParams();
+      if (search) params.append("search", search);
+      if (statusFilter && statusFilter !== "ALL") params.append("status_filter", statusFilter);
+
       try {
-        const res = await fetch(`${API_BASE}/api/history`);
+        const res = await fetch(`${API_BASE}/api/history?${params.toString()}`);
         const items = await res.json();
         if (!items.length) {
-          container.innerHTML = `<div class="state-box">Verilənlər bazasında hələ analiz yoxdur. Yuxarıdan ilk yeməyi analiz edin.</div>`;
+          container.innerHTML = `<div class="state-box">Axtarışa uyğun nəticə tapılmadı və ya tarixçə boşdur.</div>`;
           return;
         }
         container.innerHTML = items.map(item => `
@@ -276,7 +352,7 @@
             </div>
             <p style="font-size:0.9rem; margin-bottom:6px;">${item.summary}</p>
             <p style="font-size:0.83rem; color:var(--muted);"><strong>Allergenlər:</strong> ${item.allergens}</p>
-            ${item.user_note ? `<div class="note-box"><strong>Şəxsi qeyd:</strong> ${item.user_note}</div>` : ""}
+            ${item.user_note ? `<div class="note-box"><strong>Qeyd:</strong> ${item.user_note}</div>` : ""}
 
             <div class="meta">
               <span>🕒 ${item.created_at} • 🤖 ${item.model_used}</span>
@@ -292,7 +368,7 @@
                 <input type="text" id="status-input-${item.id}" value="${item.safety_status}" />
               </div>
               <div class="form-group">
-                <label>Şəxsi qeyd əlavə et</label>
+                <label>Şəxsi və ya ekspert qeydi</label>
                 <input type="text" id="note-input-${item.id}" value="${item.user_note || ''}" placeholder="Məs: Restoranda soussuz sifariş et" />
               </div>
               <button class="btn-primary btn-sm" style="width:auto;" onclick="saveEdit(${item.id})">Dəyişiklikləri Yadda Saxla</button>
@@ -300,7 +376,7 @@
           </div>
         `).join("");
       } catch (err) {
-        container.innerHTML = `<div class="state-box" style="color:var(--danger);">Tarixçəni yükləmək olmadı. Backend serverin işlədiyini yoxlayın.</div>`;
+        container.innerHTML = `<div class="state-box" style="color:var(--danger);">Tarixçəni yükləmək olmadı.</div>`;
       }
     }
 
@@ -317,12 +393,12 @@
       try {
         const res = await fetch(`${API_BASE}/api/history/${id}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: getHeaders(),
           body: JSON.stringify({ safety_status, user_note })
         });
         if (!res.ok) throw new Error("Yeniləmə zamanı xəta");
         showToast("Qeyd uğurla yeniləndi");
-        loadHistory();
+        refreshAll();
       } catch (err) {
         showToast(err.message, "error");
       }
@@ -330,17 +406,22 @@
 
     async function deleteHistory(id) {
       try {
-        const res = await fetch(`${API_BASE}/api/history/${id}`, { method: "DELETE" });
+        const res = await fetch(`${API_BASE}/api/history/${id}`, { method: "DELETE", headers: getHeaders() });
         if (!res.ok) throw new Error("Silinmə zamanı xəta");
         showToast("Analiz tarixçədən silindi");
-        loadHistory();
+        refreshAll();
       } catch (err) {
         showToast(err.message, "error");
       }
     }
 
-    loadAllergies();
-    loadHistory();
+    function refreshAll() {
+      loadStats();
+      loadAllergies();
+      loadHistory();
+    }
+
+    refreshAll();
   </script>
 </body>
 </html>
