@@ -1,113 +1,346 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="az">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeBite — AI Travel Menu Analyzer</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background: #f8fafc; color: #0f172a; line-height: 1.6; }
-        nav { background: #ffffff; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 10; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: #16a34a; }
-        .nav-links { display: flex; gap: 1.5rem; }
-        .nav-links a { text-decoration: none; color: #475569; font-weight: 500; }
-        .nav-links a:hover { color: #16a34a; }
-        .hero { text-align: center; padding: 4rem 5% 2rem; max-width: 800px; margin: 0 auto; }
-        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; color: #0f172a; }
-        .hero p { color: #64748b; font-size: 1.1rem; margin-bottom: 2rem; }
-        .analyzer-box { background: #ffffff; max-width: 700px; margin: 0 auto 3rem; padding: 2rem; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-        .input-group { display: flex; gap: 0.75rem; flex-wrap: wrap; }
-        input, select { padding: 0.9rem 1rem; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; }
-        input { flex: 1; min-width: 220px; }
-        button { background: #16a34a; color: white; border: none; padding: 0.9rem 1.8rem; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        button:hover { background: #15803d; }
-        button:disabled { background: #94a3b8; cursor: not-allowed; }
-        .result-card { margin-top: 1.5rem; padding: 1.5rem; background: #f1f5f9; border-radius: 12px; white-space: pre-wrap; display: none; text-align: left; }
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto 4rem; padding: 0 5%; }
-        .feature-item { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .feature-item h3 { margin-bottom: 0.5rem; color: #16a34a; }
-        footer { text-align: center; padding: 2rem; color: #94a3b8; font-size: 0.9rem; }
-        @media (max-width: 600px) { .hero h1 { font-size: 1.9rem; } .nav-links { display: none; } }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeBite — AI Qida Təhlükəsizliyi Platforması (Sprint 2)</title>
+  <style>
+    :root {
+      --primary: #10b981;
+      --primary-dark: #059669;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --radius: 12px;
+      --shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg); color: var(--text); line-height: 1.5; padding: 20px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand h1 { font-size: 1.5rem; font-weight: 700; color: var(--text); }
+    .badge-sprint { background: #d1fae5; color: var(--primary-dark); padding: 4px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+    .docs-link { text-decoration: none; color: var(--primary-dark); font-size: 0.9rem; font-weight: 600; border: 1px solid var(--primary); padding: 6px 12px; border-radius: 8px; }
+    .docs-link:hover { background: var(--primary); color: #fff; }
+
+    .grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+    @media (max-width: 820px) { .grid { grid-template-columns: 1fr; } }
+
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
+    .card h2 { font-size: 1.1rem; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+
+    .form-group { margin-bottom: 12px; }
+    label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: var(--muted); }
+    input, select, textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; outline: none; transition: border 0.2s; }
+    input:focus, select:focus, textarea:focus { border-color: var(--primary); }
+
+    .row-inputs { display: flex; gap: 8px; }
+    button { cursor: pointer; border: none; border-radius: 8px; padding: 10px 16px; font-weight: 600; font-size: 0.92rem; transition: 0.2s; }
+    .btn-primary { background: var(--primary); color: #fff; width: 100%; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-sm { padding: 6px 10px; font-size: 0.8rem; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+    .btn-outline:hover { background: #f1f5f9; }
+    .btn-danger { background: #fee2e2; color: var(--danger); }
+    .btn-danger:hover { background: var(--danger); color: #fff; }
+
+    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tag { display: inline-flex; align-items: center; gap: 6px; background: #fef3c7; color: #92400e; padding: 5px 10px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
+    .tag button { background: none; color: #92400e; padding: 0 2px; font-size: 1rem; line-height: 1; }
+
+    .toast { position: fixed; bottom: 20px; right: 20px; padding: 12px 18px; border-radius: 10px; color: #fff; font-weight: 600; font-size: 0.9rem; box-shadow: 0 8px 24px rgba(0,0,0,0.15); display: none; z-index: 999; }
+    .toast.success { background: var(--primary-dark); }
+    .toast.error { background: var(--danger); }
+
+    .state-box { text-align: center; padding: 28px 16px; color: var(--muted); border: 1px dashed var(--border); border-radius: 10px; font-size: 0.92rem; }
+    .history-item { border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 12px; background: #fff; }
+    .history-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .food-title { font-weight: 700; font-size: 1.05rem; }
+    .pills { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pill { padding: 3px 9px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; background: #e2e8f0; color: #334155; }
+    .pill.safe { background: #d1fae5; color: #065f46; }
+    .pill.warn { background: #fef3c7; color: #92400e; }
+    .pill.danger { background: #fee2e2; color: #991b1b; }
+    .meta { font-size: 0.78rem; color: var(--muted); margin-top: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .note-box { margin-top: 8px; padding: 8px 10px; background: #f1f5f9; border-radius: 6px; font-size: 0.85rem; color: #334155; }
+
+    .edit-panel { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); display: none; }
+  </style>
 </head>
 <body>
-    <nav>
-        <div class="logo">SafeBite</div>
-        <div class="nav-links">
-            <a href="#analyzer">Analyzer</a>
-            <a href="#features">Features</a>
-            <a href="http://127.0.0.1:8000/docs" target="_blank">API Docs</a>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>🛡️ SafeBite</h1>
+        <span class="badge-sprint">Sprint 2 • DB + CRUD</span>
+      </div>
+      <a class="docs-link" href="http://127.0.0.1:8000/docs" target="_blank">Swagger API Docs ↗</a>
+    </header>
+
+    <div class="grid">
+      <!-- SOL SÜTUN: Şəxsi Allergiya Profili (Create, Read, Delete) -->
+      <div>
+        <div class="card">
+          <h2>⚠️ Şəxsi Allergiyalarım</h2>
+          <p style="font-size: 0.84rem; color: var(--muted); margin-bottom: 12px;">
+            Əlavə etdiyiniz allergenlər AI analizi zamanı avtomatik yoxlanılır.
+          </p>
+          <form id="allergyForm">
+            <div class="form-group">
+              <label for="allergyName">Allergen adı *</label>
+              <input type="text" id="allergyName" placeholder="Məs: Fıstıq, Qlüten, Süd" required minlength="2" />
+            </div>
+            <div class="form-group">
+              <label for="allergySeverity">Həssaslıq dərəcəsi</label>
+              <select id="allergySeverity">
+                <option value="Yüksək">Yüksək</option>
+                <option value="Orta">Orta</option>
+                <option value="Aşağı">Aşağı</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-primary">+ Profilə Əlavə Et</button>
+          </form>
+
+          <div id="allergyList" class="tag-list"></div>
         </div>
-    </nav>
+      </div>
 
-    <section class="hero">
-        <h1>Eat Safely Anywhere in the World</h1>
-        <p>Paste any foreign dish name or menu item to instantly translate, uncover hidden ingredients, and check Halal & allergen safety.</p>
-    </section>
-
-    <section id="analyzer" class="analyzer-box">
-        <div class="input-group">
-            <input type="text" id="dishInput" placeholder="e.g., 宫保鸡丁 (Kung Pao Chicken) or Tacos al Pastor...">
-            <select id="langSelect">
-                <option value="Azerbaijani">Azərbaycan</option>
-                <option value="English">English</option>
-                <option value="Russian">Русский</option>
-            </select>
-            <button id="analyzeBtn" onclick="analyzeDish()">Analyze</button>
+      <!-- SAĞ SÜTUN: Yemək Analizi (Create) və Tarixçə (Read, Update, Delete) -->
+      <div>
+        <div class="card">
+          <h2>🍽️ Yeni Qida Analizi</h2>
+          <form id="analyzeForm">
+            <div class="row-inputs" style="margin-bottom: 12px; flex-wrap: wrap;">
+              <div style="flex: 2; min-width: 200px;">
+                <label for="foodName">Yeməyin adı *</label>
+                <input type="text" id="foodName" placeholder="Məs: Sezar salatı, Pad Thai, Xəngəl..." required minlength="2" />
+              </div>
+              <div style="flex: 1; min-width: 140px;">
+                <label for="language">Cavab dili</label>
+                <select id="language">
+                  <option value="Azərbaycan">Azərbaycan</option>
+                  <option value="English">English</option>
+                  <option value="Русский">Русский</option>
+                  <option value="Türkçe">Türkçe</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" id="analyzeBtn" class="btn-primary">AI ilə Analiz Et və Yadda Saxla</button>
+          </form>
         </div>
-        <div id="result" class="result-card"></div>
-    </section>
 
-    <section id="features" class="features">
-        <div class="feature-item">
-            <h3>Instant Translation</h3>
-            <p>Break language barriers with immediate contextual dish translations.</p>
+        <div class="card">
+          <h2>
+            <span>📋 Analiz Tarixçəsi (Verilənlər Bazası)</span>
+            <button class="btn-outline btn-sm" onclick="loadHistory()">Yenilə</button>
+          </h2>
+          <div id="historyContainer">
+            <div class="state-box">Məlumatlar yüklənir...</div>
+          </div>
         </div>
-        <div class="feature-item">
-            <h3>Ingredient Breakdown</h3>
-            <p>Know exactly what goes into local dishes before you order.</p>
-        </div>
-        <div class="feature-item">
-            <h3>Dietary & Halal Alerts</h3>
-            <p>Clear warnings for pork, alcohol, nuts, and spice levels.</p>
-        </div>
-    </section>
+      </div>
+    </div>
+  </div>
 
-    <footer>SafeBite MVP — Built for Holberton Capstone Project</footer>
+  <div id="toast" class="toast"></div>
 
-    <script>
-        async function analyzeDish() {
-            const dishName = document.getElementById('dishInput').value.trim();
-            const targetLanguage = document.getElementById('langSelect').value;
-            const resultDiv = document.getElementById('result');
-            const btn = document.getElementById('analyzeBtn');
+  <script>
+    const API_BASE = "http://127.0.0.1:8000";
 
-            if (!dishName) return alert("Please enter a dish name!");
+    function showToast(msg, type = "success") {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.className = `toast ${type}`;
+      el.style.display = "block";
+      setTimeout(() => { el.style.display = "none"; }, 3200);
+    }
 
-            btn.disabled = true;
-            btn.innerText = "Analyzing...";
-            resultDiv.style.display = "block";
-            resultDiv.innerText = "Checking ingredients and safety alerts...";
+    function getStatusClass(status) {
+      const s = (status || "").toLowerCase();
+      if (s.includes("təhlükəsiz") || s.includes("safe") || s.includes("halal")) return "safe";
+      if (s.includes("təhlükəli") || s.includes("danger") || s.includes("qeyri")) return "danger";
+      return "warn";
+    }
 
-            try {
-                const res = await fetch("http://127.0.0.1:8000/api/analyze", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ dish_name: dishName, target_language: targetLanguage })
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    resultDiv.innerText = data.analysis;
-                } else {
-                    resultDiv.innerText = "Error: " + (data.detail || "Something went wrong");
-                }
-            } catch (err) {
-                resultDiv.innerText = "Connection error. Make sure the backend server is running on port 8000.";
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Analyze";
-            }
+    // --- ALLERGIES CRUD ---
+    async function loadAllergies() {
+      const container = document.getElementById("allergyList");
+      try {
+        const res = await fetch(`${API_BASE}/api/allergies`);
+        const data = await res.json();
+        if (!data.length) {
+          container.innerHTML = `<div class="state-box" style="width:100%; padding:14px;">Hələ allergiya əlavə edilməyib.</div>`;
+          return;
         }
-    </script>
+        container.innerHTML = data.map(item => `
+          <span class="tag">
+            ${item.name} (${item.severity})
+            <button title="Sil" onclick="deleteAllergy(${item.id})">&times;</button>
+          </span>
+        `).join("");
+      } catch (err) {
+        container.innerHTML = `<div class="state-box" style="width:100%; color:var(--danger);">Backend serverə qoşulmaq mümkün olmadı.</div>`;
+      }
+    }
+
+    document.getElementById("allergyForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nameInput = document.getElementById("allergyName");
+      const severity = document.getElementById("allergySeverity").value;
+      const name = nameInput.value.trim();
+      if (name.length < 2) return showToast("Allergen adı ən azı 2 hərf olmalıdır", "error");
+
+      try {
+        const res = await fetch(`${API_BASE}/api/allergies`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, severity })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Xəta baş verdi");
+        nameInput.value = "";
+        showToast("Allergiya profilə əlavə olundu");
+        loadAllergies();
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    });
+
+    async function deleteAllergy(id) {
+      try {
+        const res = await fetch(`${API_BASE}/api/allergies/${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("Silinmə zamanı xəta");
+        showToast("Allergiya silindi");
+        loadAllergies();
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    }
+
+    // --- ANALYZE & HISTORY CRUD ---
+    document.getElementById("analyzeForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const foodInput = document.getElementById("foodName");
+      const language = document.getElementById("language").value;
+      const btn = document.getElementById("analyzeBtn");
+      const food_name = foodInput.value.trim();
+
+      if (food_name.length < 2) return showToast("Yemək adını düzgün daxil edin", "error");
+
+      btn.disabled = true;
+      btn.textContent = "AI analiz edir və bazaya yazır...";
+
+      try {
+        const res = await fetch(`${API_BASE}/api/analyze`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ food_name, language })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Analiz xətası");
+        foodInput.value = "";
+        showToast(`"${data.food_name}" analiz edildi və yadda saxlanıldı!`);
+        loadHistory();
+      } catch (err) {
+        showToast(err.message, "error");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "AI ilə Analiz Et və Yadda Saxla";
+      }
+    });
+
+    async function loadHistory() {
+      const container = document.getElementById("historyContainer");
+      container.innerHTML = `<div class="state-box">Tarixçə yüklənir...</div>`;
+      try {
+        const res = await fetch(`${API_BASE}/api/history`);
+        const items = await res.json();
+        if (!items.length) {
+          container.innerHTML = `<div class="state-box">Verilənlər bazasında hələ analiz yoxdur. Yuxarıdan ilk yeməyi analiz edin.</div>`;
+          return;
+        }
+        container.innerHTML = items.map(item => `
+          <div class="history-item" id="card-${item.id}">
+            <div class="history-top">
+              <span class="food-title">${item.food_name}</span>
+              <div class="pills">
+                <span class="pill ${getStatusClass(item.safety_status)}">${item.safety_status}</span>
+                <span class="pill ${getStatusClass(item.halal_status)}">${item.halal_status}</span>
+              </div>
+            </div>
+            <p style="font-size:0.9rem; margin-bottom:6px;">${item.summary}</p>
+            <p style="font-size:0.83rem; color:var(--muted);"><strong>Allergenlər:</strong> ${item.allergens}</p>
+            ${item.user_note ? `<div class="note-box"><strong>Şəxsi qeyd:</strong> ${item.user_note}</div>` : ""}
+
+            <div class="meta">
+              <span>🕒 ${item.created_at} • 🤖 ${item.model_used}</span>
+              <div>
+                <button class="btn-outline btn-sm" onclick="toggleEdit(${item.id})">Redaktə et</button>
+                <button class="btn-danger btn-sm" onclick="deleteHistory(${item.id})">Sil</button>
+              </div>
+            </div>
+
+            <div class="edit-panel" id="edit-${item.id}">
+              <div class="form-group">
+                <label>Statusu yenilə</label>
+                <input type="text" id="status-input-${item.id}" value="${item.safety_status}" />
+              </div>
+              <div class="form-group">
+                <label>Şəxsi qeyd əlavə et</label>
+                <input type="text" id="note-input-${item.id}" value="${item.user_note || ''}" placeholder="Məs: Restoranda soussuz sifariş et" />
+              </div>
+              <button class="btn-primary btn-sm" style="width:auto;" onclick="saveEdit(${item.id})">Dəyişiklikləri Yadda Saxla</button>
+            </div>
+          </div>
+        `).join("");
+      } catch (err) {
+        container.innerHTML = `<div class="state-box" style="color:var(--danger);">Tarixçəni yükləmək olmadı. Backend serverin işlədiyini yoxlayın.</div>`;
+      }
+    }
+
+    function toggleEdit(id) {
+      const panel = document.getElementById(`edit-${id}`);
+      panel.style.display = panel.style.display === "block" ? "none" : "block";
+    }
+
+    async function saveEdit(id) {
+      const safety_status = document.getElementById(`status-input-${id}`).value.trim();
+      const user_note = document.getElementById(`note-input-${id}`).value.trim();
+      if (safety_status.length < 2) return showToast("Status boş ola bilməz", "error");
+
+      try {
+        const res = await fetch(`${API_BASE}/api/history/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ safety_status, user_note })
+        });
+        if (!res.ok) throw new Error("Yeniləmə zamanı xəta");
+        showToast("Qeyd uğurla yeniləndi");
+        loadHistory();
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    }
+
+    async function deleteHistory(id) {
+      try {
+        const res = await fetch(`${API_BASE}/api/history/${id}`, { method: "DELETE" });
+        if (!res.ok) throw new Error("Silinmə zamanı xəta");
+        showToast("Analiz tarixçədən silindi");
+        loadHistory();
+      } catch (err) {
+        showToast(err.message, "error");
+      }
+    }
+
+    loadAllergies();
+    loadHistory();
+  </script>
 </body>
 </html>
